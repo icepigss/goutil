@@ -97,3 +97,60 @@ func SortDesc[T types.Ordered](s []T) {
 		return s[i] > s[j]
 	})
 }
+
+// chunks an slice into slices with num elements
+func Chunk[T any](s []T, num int) [][]T {
+	if num <= 0 {
+		return nil
+	}
+	chunks := make([][]T, (len(s)+num-1)/num)
+
+	for i, j := 0, 0; i < len(s); i++ {
+		if i > 0 && i%num == 0 {
+			j++
+		}
+		if chunks[j] == nil {
+			chunks[j] = make([]T, 0)
+		}
+		chunks[j] = append(chunks[j], s[i])
+	}
+
+	return chunks
+}
+
+// compares slice `a` against `b` and returns the values in slice `a` that are not present in `b`
+// eg: a=[]int{1,2,3}; b=[]int{2,4}; out=[]int{1,3}
+func Diff[S types.SC[T], T comparable](a, b S) S {
+	out := make(S, 0, len(a))
+	for _, item := range a {
+		if Contains(b, item) {
+			continue
+		}
+		out = append(out, item)
+	}
+
+	return out
+}
+
+// get elements that both in slices
+// eg: s1=[]int{1,2,3}; s2=[]int{2,4}; s3=[]int{2,3} out=[]int{2}
+func Intersection[S types.SC[T], T comparable](ss ...S) S {
+	c := len(ss)
+	m := make(map[T]int)
+	l := 0
+	for _, s := range ss {
+		for _, item := range Unique(s) {
+			m[item] += 1
+			l++
+		}
+	}
+	out := make(S, 0, l)
+	for item, count := range m {
+		if count < c {
+			continue
+		}
+		out = append(out, item)
+	}
+
+	return out
+}

@@ -208,3 +208,66 @@ func TestSortDesc(t *testing.T) {
 		assert.Equal(t, s, []float64{3.0, 2.0, 1.0})
 	})
 }
+
+func TestDiff(t *testing.T) {
+	t.Run("int", func(t *testing.T) {
+		s1 := []int{1, 2, 3}
+		s2 := []int{2, 4}
+		ret := Diff(s1, s2)
+		assert.Equal(t, ret, []int{1, 3})
+	})
+	t.Run("float", func(t *testing.T) {
+		s1 := []float64{1, 2, 3}
+		s2 := []float64{2, 4}
+		ret := Diff(s1, s2)
+		assert.Equal(t, ret, []float64{1, 3})
+	})
+	t.Run("string", func(t *testing.T) {
+		s1 := []string{"a", "b", "c"}
+		s2 := []string{"b", "d"}
+		ret := Diff(s1, s2)
+		assert.Equal(t, ret, []string{"a", "c"})
+	})
+}
+
+func TestChunk(t *testing.T) {
+	t.Run("int", func(t *testing.T) {
+		s := []int{1, 2, 3, 4, 5, 6, 7}
+		ret := Chunk(s, 3)
+		assert.Equal(t, ret, [][]int{{1, 2, 3}, {4, 5, 6}, {7}})
+	})
+	t.Run("float", func(t *testing.T) {
+		s := []float64{1, 2, 3, 4, 5, 6, 7}
+		ret := Chunk(s, 3)
+		assert.Equal(t, ret, [][]float64{{1, 2, 3}, {4, 5, 6}, {7}})
+	})
+	t.Run("string", func(t *testing.T) {
+		s := []string{"a", "b", "c", "d", "e", "f", "g"}
+		ret := Chunk(s, 3)
+		assert.Equal(t, ret, [][]string{{"a", "b", "c"}, {"d", "e", "f"}, {"g"}})
+	})
+}
+
+func TestIntersection(t *testing.T) {
+	t.Run("int", func(t *testing.T) {
+		s1 := []int{1, 2, 3}
+		s2 := []int{2, 4}
+		s3 := []int{3, 2}
+		ret := Intersection(s1, s2, s3)
+		assert.Equal(t, ret, []int{2})
+	})
+	t.Run("float", func(t *testing.T) {
+		s1 := []float64{1, 2, 3}
+		s2 := []float64{2, 4}
+		s3 := []float64{3, 2}
+		ret := Intersection(s1, s2, s3)
+		assert.Equal(t, ret, []float64{2})
+	})
+	t.Run("string", func(t *testing.T) {
+		s1 := []string{"a", "b", "c"}
+		s2 := []string{"b", "d"}
+		s3 := []string{"c", "b"}
+		ret := Intersection(s1, s2, s3)
+		assert.Equal(t, ret, []string{"b"})
+	})
+}
